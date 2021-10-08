@@ -1,8 +1,11 @@
 [package]
 name = "blink_lights"
 version = "0.1.0"
+authors = ["ronverbs"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# gpio-rust = "0.1.4" will not compile since it uses python RPi.GPIO
+gpio-cdev = "0.5.0"
