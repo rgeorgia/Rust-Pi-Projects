@@ -1,17 +1,20 @@
-use gpio_cdev::{Chip, LineRequestFlags};
+use rust_gpiozero::*;
+use std::thread::sleep;
+use std::time::Duration;
 
-fn main() -> Result<(), gpio_cdev::Error> {
-    // Read the state of GPIO4 on a raspberry pi.  /dev/gpiochip0
-    // maps to the driver for the SoC (builtin) GPIO controller.
-    // The LineHandle returned by request must be assigned to a
-    // variable (in this case the variable handle) to ensure that
-    // the corresponding file descriptor is not closed.
-    let mut chip = Chip::new("/dev/gpioc0")?;
-    let handle = chip
-        .get_line(5)?
-        .request(LineRequestFlags::INPUT, 0, "read-input")?;
-    for _ in 1..5 {
-        println!("Value: {:?}", handle.get_value()?);
+fn main() {
+    println!("Hello, world!");
+
+    let led = LED::new(18);
+
+    loop{
+        led.on();
+        println!("ON") ;
+        //delay
+        sleep(Duration::from_secs(1));
+        led.off();
+        println!("OFF") ;
+        //delay
+        sleep(Duration::from_secs(1));
     }
-    Ok(())
 }
