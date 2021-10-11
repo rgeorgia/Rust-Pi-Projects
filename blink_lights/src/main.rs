@@ -5,11 +5,18 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::thread;
 use std::time;
+use structopt::StructOpt;
+
+#[derive(StructOpt)]
+struct Cli {
+    number_of_blinks: u64,
+    pin_number: u64,
+}
 
 fn main() -> Result<(), Error> {
-    // Start using signal_hook.
-    // Example from https://dev.to/talzvon/handling-unix-kill-signals-in-rust-55g6
+    let args = Cli::from_args();
 
+    // Start using signal_hook.
     let term = Arc::new(AtomicBool::new(false));
 
     // Ask signal_hook to set the term variable to true
