@@ -7,8 +7,7 @@ use std::thread;
 use std::time;
 
 fn main() -> Result<(), Error> {
-
-    // Start using signal_hook. 
+    // Start using signal_hook.
     // Example from https://dev.to/talzvon/handling-unix-kill-signals-in-rust-55g6
 
     let term = Arc::new(AtomicBool::new(false));
@@ -31,11 +30,10 @@ fn main() -> Result<(), Error> {
     // Since our loop is basically an infinite loop, that only ends when we receive SIGINT, if
     // we got here, it's because the loop exited after receiving SIGINT
     println!("Received SIGINT kill signal. LED is {}", led.value());
-    if led.value() {
-        println!("Clean up... turning all LEDs to off") ;
-        led.off() ;
+    if led.is_lit() {
+        println!("Clean up... turning all LEDs to off");
+        led.off();
     }
-
 
     Ok(())
 }
