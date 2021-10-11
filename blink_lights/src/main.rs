@@ -7,9 +7,12 @@ use std::thread;
 use std::time;
 use structopt::StructOpt;
 
-#[derive(StructOpt)]
+#[derive(Debug, StructOpt)]
+#[structopt(name = "blink_lights", about = "Blink light on my rpi3")]
 struct Cli {
+    #[structopt(short = "b", long = "blinks")]
     number_of_blinks: u64,
+    #[structopt(short = "p", long = "pin")]
     pin_number: u64,
 }
 
