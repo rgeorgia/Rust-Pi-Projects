@@ -23,8 +23,6 @@ struct Cli {
 fn main() -> Result<(), Error> {
     let args = Cli::from_args();
 
-    println!("{:?}", args);
-
     // Start using signal_hook.
     let term = Arc::new(AtomicBool::new(false));
 
