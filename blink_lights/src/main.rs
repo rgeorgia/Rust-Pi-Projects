@@ -28,9 +28,9 @@ fn main() -> Result<(), Error> {
         thread::sleep(time::Duration::from_secs(3));
     }
 
-    // Since our loop is basically an infinite loop, that only ends when we receive SIGTERM, if
-    // we got here, it's because the loop exited after receiving SIGTERM
-    println!("Received SIGTERM kill signal. LED is {}", led.value());
+    // Since our loop is basically an infinite loop, that only ends when we receive SIGINT, if
+    // we got here, it's because the loop exited after receiving SIGINT
+    println!("Received SIGINT kill signal. LED is {}", led.value());
     if led.value() {
         println!("Clean up... turning all LEDs to off") ;
         led.off() ;
