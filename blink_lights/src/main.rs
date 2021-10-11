@@ -14,6 +14,10 @@ struct Cli {
     number_of_blinks: u64,
     #[structopt(short = "p", long = "pin")]
     pin_number: u8,
+    #[structopt(short = "f", long = "off", default_value = "1")]
+    off_time: u64,
+    #[structopt(short = "o", long = "on", default_value = "1")]
+    on_time: u64,
 }
 
 fn main() -> Result<(), Error> {
@@ -30,19 +34,17 @@ fn main() -> Result<(), Error> {
 
     let led = LED::new(args.pin_number);
 
-    //while !term.load(Ordering::Relaxed) {
     for n in 0..args.number_of_blinks {
         if term.load(Ordering::Relaxed) {
             break ;
         }
         led.off();
         print!("{}) OFF ", n + 1);
-        thread::sleep(time::Duration::from_secs(1));
+        thread::sleep(time::Duration::from_secs(args.off_time));
         led.on();
         println!("ON");
-        thread::sleep(time::Duration::from_secs(1));
+        thread::sleep(time::Duration::from_secs(args.on_time));
     }
-    //}
 
     // Since our loop is basically an infinite loop, that only ends when we receive SIGINT, if
     // we got here, it's because the loop exited after receiving SIGINT
