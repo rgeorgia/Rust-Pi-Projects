@@ -13,11 +13,13 @@ struct Cli {
     #[structopt(short = "b", long = "blinks")]
     number_of_blinks: u64,
     #[structopt(short = "p", long = "pin")]
-    pin_number: u64,
+    pin_number: u8,
 }
 
 fn main() -> Result<(), Error> {
     let args = Cli::from_args();
+
+    println!("{:?}", args);
 
     // Start using signal_hook.
     let term = Arc::new(AtomicBool::new(false));
@@ -26,16 +28,21 @@ fn main() -> Result<(), Error> {
     // when the program receives a SIGINT for ctl-c kill signal
     flag::register(signal_hook::consts::SIGINT, Arc::clone(&term))?;
 
-    let led = LED::new(18);
+    let led = LED::new(args.pin_number);
 
-    while !term.load(Ordering::Relaxed) {
+    //while !term.load(Ordering::Relaxed) {
+    for n in 0..args.number_of_blinks {
+        if term.load(Ordering::Relaxed) {
+            break ;
+        }
         led.off();
-        println!("OFF");
+        print!("{}) OFF ", n + 1);
         thread::sleep(time::Duration::from_secs(1));
         led.on();
         println!("ON");
-        thread::sleep(time::Duration::from_secs(3));
+        thread::sleep(time::Duration::from_secs(1));
     }
+    //}
 
     // Since our loop is basically an infinite loop, that only ends when we receive SIGINT, if
     // we got here, it's because the loop exited after receiving SIGINT
