@@ -10,18 +10,32 @@ use structopt::StructOpt;
 #[derive(Debug, StructOpt)]
 #[structopt(name = "blink_lights", about = "Blink light on my rpi3")]
 struct Cli {
-    #[structopt(short = "b", long = "blinks")]
+    #[structopt(short = "b", long = "blinks", help="Min 1, Max 100")]
     number_of_blinks: u64,
     #[structopt(short = "p", long = "pin")]
     pin_number: u8,
-    #[structopt(short = "f", long = "off", default_value = "1")]
+    #[structopt(short = "f", long = "off", default_value = "1", help = "Range from 1 to 5")]
     off_time: u64,
-    #[structopt(short = "o", long = "on", default_value = "1")]
+    #[structopt(short = "o", long = "on", default_value = "1", help = "Range from 1 to 5")]
     on_time: u64,
 }
 
+const MAX_BLINK: u64 = 100;
+const MAX_TIME: u64 = 10 ;
+
 fn main() -> Result<(), Error> {
     let args = Cli::from_args();
+
+    if args.number_of_blinks > MAX_BLINK {
+        println!("The number of blinks cannot be greater than {}", MAX_BLINK) ;
+        return Ok(()) ;
+    }
+
+    if args.off_time > MAX_TIME || args.on_time > MAX_TIME {
+        println!("On or off time cannot be greater than {}", MAX_TIME) ;
+        return Ok(()) ;
+    }
+
 
     // Start using signal_hook.
     let term = Arc::new(AtomicBool::new(false));
